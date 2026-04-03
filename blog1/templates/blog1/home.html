@@ -1,0 +1,86 @@
+{% extends 'blog1/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+
+  {% for post in posts %}
+    <div class="card mb-4 shadow-sm border-0 post-card">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <!-- Profile Image -->
+          <div class="col-md-2 text-center">
+            <img src="{{ post.author.profile.image.url }}" class="rounded-circle img-fluid shadow" style="width: 80px; height: 80px; object-fit: cover;">
+          </div>
+          <!-- Post Content -->
+          <div class="col-md-10">
+            <div class="d-flex justify-content-between">
+              <div>
+                <a href="{% url 'user-posts' post.author.username %}" class="fw-bold text-dark text-decoration-none">
+                  {{ post.author }}
+                </a>
+              </div>
+              <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+            </div>
+            <h4 class="mt-2">
+              <a href="{% url 'post-detail' post.pk %}" class="text-decoration-none text-primary post-title">
+                {{ post.title }}
+              </a>
+            </h4>
+            <p class="text-muted">{{ post.content|truncatewords:25 }}</p>
+            <div class="mt-2">
+              <a href="{% url 'post-detail' post.id %}" class="btn btn-sm btn-outline-primary">Read More</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+  {% if is_paginated %}
+    <div class="pagination d-flex gap-2 flex-wrap">
+      {% if page_obj.has_previous %}
+        <a href="?page=1" class="btn btn-outline-primary">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-primary">Previous</a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a href="?page={{ num }}" class="btn btn-primary">{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a href="?page={{ num }}" class="btn btn-outline-primary">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-primary">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-primary">Last</a>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+
+<!-- Extra Styling -->
+<style>
+.post-card {
+  border-radius: 18px;
+  transition: all 0.3s ease;
+  background: #ffffff;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05), 0 8px 20px rgba(0,0,0,0.08);
+}
+.post-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+  opacity: 0;
+  transition: 0.4s;
+  pointer-events: none;
+}
+.post-card:hover::before { opacity: 1; }
+.post-title { transition: 0.3s; }
+.post-title:hover { color: #667eea; }
+</style>
+
+{% endblock content %}

@@ -1,0 +1,70 @@
+{% extends 'blog1/base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+  <div class="card shadow-lg border-0 p-4 post-detail-card">
+
+    <!-- Author Section -->
+    <div class="d-flex align-items-center mb-3">
+      
+      <img 
+        src="{{ post.author.profile.image.url }}" 
+        class="rounded-circle shadow me-3"
+        style="width: 70px; height: 70px; object-fit: cover;"
+      >
+
+      <div>
+        <a href="{% url 'user-posts' post.author.username %}" 
+           class="fw-bold text-dark text-decoration-none">
+           {{ post.author }}
+        </a><br>
+        <small class="text-muted">
+          {{ post.date_posted|date:"F d, Y" }}
+        </small>
+      </div>
+
+      <!-- Update/Delete Buttons -->
+      {% if object.author == user %}
+      <div class="ms-auto">
+        <a href="{% url 'post-update' post.id %}" 
+           class="btn btn-outline-primary btn-sm me-2">
+           ✏️ Edit
+        </a>
+        <a href="{% url 'post-delete' post.id %}" 
+           class="btn btn-outline-danger btn-sm">
+           🗑️ Delete
+        </a>
+      </div>
+      {% endif %}
+
+    </div>
+
+    <hr>
+
+    <!-- Title -->
+    <h2 class="mb-3 fw-bold">{{ post.title }}</h2>
+
+    <!-- Content -->
+    <p class="text-muted fs-5" style="line-height: 1.8;">
+      {{ post.content }}
+    </p>
+
+  </div>
+
+</div>
+
+<!-- Extra Styling -->
+<style>
+.post-detail-card {
+  border-radius: 15px;
+  transition: 0.3s ease;
+}
+
+.post-detail-card:hover {
+  box-shadow: 0px 10px 30px rgba(0,0,0,0.15);
+}
+</style>
+
+{% endblock %}
