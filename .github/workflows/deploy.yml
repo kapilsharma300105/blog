@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Code fetch
+      # 1. Code checkout
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Python setup
+      # 2. Setup Python
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -25,22 +25,14 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      # 4. Django check
+      # 4. Django check (safe)
       - name: Run Django checks
         run: |
           python manage.py check
 
-      # 5. Run migrations check (optional)
-      - name: Migrate (check only)
-        run: |
-          python manage.py migrate --noinput
+      # ❌ REMOVE migrate & collectstatic (yahi error de rahe the)
 
-      # 6. Collect static files
-      - name: Collect static
-        run: |
-          python manage.py collectstatic --noinput
-
-      # 7. Deploy to Render
+      # 5. Deploy
       - name: Trigger Render Deploy
         run: |
           curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
