@@ -21,16 +21,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-u@h9cbx9x8kqx8hjk56&uuag$8y$368wlrz%9zc8&spi_*@ey7'
+SECRET_KEY = 'django-insecure-u@h9cbx9x8kqx8hjk56&uuag$8y$368wlrz%9zc8&spi_*@ey7'
 
 # # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+DEBUG = True
 
 # ALLOWED_HOSTS = []
 # SECRET_KEY = os.environ.get("SECRET_KEY")
 # DEBUG = os.environ.get("DEBUG", "False").   lower()== "True"
 # ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
 ALLOWED_HOSTS = ['.onrender.com']
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -135,6 +136,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
+
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 LOGIN_REDIRECT_URL = 'blog-home'
 LOGIN_URL = 'login'
@@ -145,5 +147,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'priyanshikapil300105@gmail.com'
-EMAIL_HOST_PASSWORD = 'unmc gcqo ohga blne'
+EMAIL_HOST_PASSWORD = os.environ.get('unmc gcqo ohga blne')
 
