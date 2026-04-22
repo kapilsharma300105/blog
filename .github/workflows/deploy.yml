@@ -3,29 +3,13 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main   # jab bhi main branch pe push hoga
+      - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Install dependencies
-        run: |
-          npm install
-
-      - name: Build project
-        run: |
-          npm run build
-
   deploy:
-    needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to Render
+      - name: Trigger Render Deploy
         run: |
           curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
