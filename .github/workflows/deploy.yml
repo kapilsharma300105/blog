@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Django CI/CD Pipeline
 
 on:
   push:
@@ -6,10 +6,41 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Code fetch
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Python setup
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      # 4. Django check
+      - name: Run Django checks
+        run: |
+          python manage.py check
+
+      # 5. Run migrations check (optional)
+      - name: Migrate (check only)
+        run: |
+          python manage.py migrate --noinput
+
+      # 6. Collect static files
+      - name: Collect static
+        run: |
+          python manage.py collectstatic --noinput
+
+      # 7. Deploy to Render
       - name: Trigger Render Deploy
         run: |
           curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
